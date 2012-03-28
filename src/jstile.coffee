@@ -5,7 +5,7 @@
       @dom = element.parent()
       @tiles = [new Tile(element, 1, 0)]
 
-    # Returns a randomly a new tile split from the oldest tile.
+    # Returns a new tile split from a random oldest tile.
     split: ->
       child = @oldest().fission()
       @tiles.push(child)
