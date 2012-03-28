@@ -7,14 +7,25 @@
 
     # Returns a randomly a new tile split from the oldest tile.
     split: ->
-      child = @oldest.fission()
-      @tiles.push(new Tile(child, tile.generation, tile.orientation()))
+      child = @oldest().fission()
+      @tiles.push(child)
 
       child
+
+    # Returns a random least-recently-split tile.
+    # TODO: Order matching tiles by left-to-right, then top-to-down
+    oldest: ->
+      generations = (tile.generation for tile in @tiles)
+
+      minGeneration = Math.min.apply(this, generations)
+      minIndex = generations.indexOf(minGeneration)
+
+      @tiles[minIndex]
 
   class Tile
     constructor: (@element, @generation, @type) ->
 
+    # A human readable form of @type.
     orientation: ->
       if @type is 0
         'horizontal'
@@ -34,18 +45,19 @@
       @flip()
       @generation += 1
 
-    # Shrinks, and returns a new div filling the newly allocated space
+    # Shrinks, and returns a new Tile filling the newly allocated space.
     fission: ->
-      container = @element.wrap('<div/>')
+      @element.wrap('<div/>')
+      container = @element.parent()
+
       @shrink()
 
       child = $('<div></div>')
       container.append(child)
 
-      child
+      new Tile(child, @generation, @type)
 
   $.fn.jstile = ->
-    console.log(this)
     new Mosaic(this)
 
 )(jQuery)
