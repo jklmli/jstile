@@ -2,6 +2,8 @@
   class Mosaic
     constructor: (element) ->
       element.wrap('<div/>')
+
+      # Need to call .parent() since .wrap() is non-mutative.
       @dom = element.parent()
       @tiles = [new Tile(element, 1, 0)]
 
@@ -12,7 +14,8 @@
 
       child
 
-    # Returns a random least-recently-split tile.
+    # Returns a least-recently-split tile.  If there are several matches,
+    # the result is random, since children of splits may be appended out of order.
     # TODO: Order matching tiles by left-to-right, then top-to-down
     oldest: ->
       generations = (tile.generation for tile in @tiles)
@@ -53,6 +56,11 @@
       @shrink()
 
       child = $('<div></div>')
+
+      # Mirror dimensions of parent.
+      child.width(@element.width())
+      child.height(@element.height())
+
       container.append(child)
 
       new Tile(child, @generation, @type)
