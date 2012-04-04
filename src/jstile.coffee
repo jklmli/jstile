@@ -59,7 +59,7 @@
       @flip()
       @generation += 1
 
-    # Shrinks, and returns a new Tile filling the newly allocated space.
+    # Shrinks, and returns a new tile filling the newly allocated space.
     fission: ->
 
       # Wrap the current element in a new container
