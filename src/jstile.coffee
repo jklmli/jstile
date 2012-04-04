@@ -14,7 +14,7 @@
       # Need to call .parent() since .wrap() is non-mutative.
       @dom = element.parent()
 
-      @tiles = [new Tile(element, 1, 0)]
+      @tiles = [new Tile(element, 0)]
 
     # Returns a new tile split from the oldest tile, break ties left to right, up to down
     split: (element) ->
@@ -32,7 +32,7 @@
       child
 
   class Tile
-    constructor: (@dom, @generation, @type) ->
+    constructor: (@dom, @type) ->
       @dom.wrap('<div/>')
 
 
@@ -81,7 +81,7 @@
     fission: (child) ->
       @enclose()
 
-      tile = new Tile(child, @generation, @type)
+      tile = new Tile(child, @type)
       @shrink()
       tile.shrink()
 
