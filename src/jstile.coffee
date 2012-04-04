@@ -16,27 +16,25 @@
 
       @tiles = [new Tile(element, 1, 0)]
 
-    # Returns a new tile split from a random oldest tile.
+    # Returns a new tile split from the oldest tile, break ties left to right, up to down
     split: (element) ->
-      child = @oldest().fission(element)
+
+      # Pull off the oldest tile from the front of the queue
+      oldest = @tiles[0]
+      child = oldest.fission(element)
+
+      # Push the split tiles to the end of the tiles queue
+      @tiles.push(oldest)
+      @tiles.shift()
+
       @tiles.push(child)
 
       child
 
-    # Returns a least-recently-split tile.  If there are several matches,
-    # the result is random, since children of splits may be appended out of order.
-    # TODO: Order matching tiles by left-to-right, then top-to-down
-    oldest: ->
-      generations = (tile.generation for tile in @tiles)
-
-      minGeneration = Math.min(generations...)
-      minIndex = generations.indexOf(minGeneration)
-
-      @tiles[minIndex]
-
   class Tile
     constructor: (@dom, @generation, @type) ->
       @dom.wrap('<div/>')
+
 
       @wrapper().addClass('tile')
       @wrapper().css('float', 'left')

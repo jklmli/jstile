@@ -8,8 +8,10 @@ $(document).ready ->
   rescale()
 
 split = ->
-  base.split($('<img>'))
+  tile = base.split($('<img>'))
   rescale()
+
+  tile
 
 rescale = ->
   for image in $('img')
