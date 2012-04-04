@@ -11,7 +11,8 @@ split = ->
   tile = base.split()
   tile.element.append('<img/>')
   rescale()
-  return tile
+  tile
+
 
 rescale = ->
   for image in $('img')
