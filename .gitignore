@@ -4,3 +4,4 @@
 
 # Compiled
 dist/
+test/init.js
