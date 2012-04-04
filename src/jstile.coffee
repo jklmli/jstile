@@ -7,6 +7,14 @@
     else
       'portrait'
 
+  shrinkHorizontally = (element) ->
+    element.css('width', '50%')
+    element.css('height', '100%')
+
+  shrinkVertically = (element) ->
+    element.css('width', '100%')
+    element.css('height', '50%')
+
   # HTML classes associated with each level of tile & container
   jsTileClass = 'jstile'
   tileClass = 'tile'
@@ -54,11 +62,9 @@
     # Cuts longer dimension of tile in half.
     shrink: ->
       if orientation(@dom) is 'portrait'
-        @wrapper().css('width', '100%')
-        @wrapper().css('height', '50%')
+        shrinkVertically(@wrapper())
       else
-        @wrapper().css('width', '50%')
-        @wrapper().css('height', '100%')
+        shrinkHorizontally(@wrapper())
 
     # Wrap the current element in a new container
     enclose: ->
@@ -79,11 +85,9 @@
       @shrink()
 
       if orientation(@dom) is 'portrait'
-        tile.wrapper().css('width', '100%')
-        tile.wrapper().css('height', '50%')
+        shrinkVertically(tile.wrapper())
       else
-        tile.wrapper().css('width', '50%')
-        tile.wrapper().css('height', '100%')
+        shrinkHorizontally(tile.wrapper())
 
       container = @wrapper().parent()
       container.append(tile.wrapper())
