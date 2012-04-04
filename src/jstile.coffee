@@ -1,5 +1,12 @@
 (($) ->
 
+  # Takes in jQuery object
+  orientation = (element) ->
+    if element.width() > element.height()
+      'landscape'
+    else
+      'portrait'
+
   # HTML classes associated with each level of tile & container
   jsTileClass = 'jstile'
   tileClass = 'tile'
@@ -7,7 +14,6 @@
 
   class Mosaic
     constructor: (element) ->
-
       # Wrap the first element to create the first tile & parent element
       element.wrap('<div/>')
       element.parent().addClass(jsTileClass)
@@ -18,7 +24,6 @@
 
     # Returns a new tile split from the oldest tile, break ties left to right, up to down
     split: (element) ->
-
       # Pull off the oldest tile from the front of the queue
       oldest = @tiles[0]
       child = oldest.fission(element)
@@ -32,7 +37,7 @@
       child
 
   class Tile
-    constructor: (@dom, @type) ->
+    constructor: (@dom) ->
       @dom.wrap('<div/>')
 
       @wrapper().addClass('tile')
@@ -43,26 +48,14 @@
     wrapper: ->
       @dom.parent()
 
-    # A human readable form of @type.
-    orientation: ->
-      if @type is 0
-        'horizontal'
-      else
-        'vertical'
-
-    flip: ->
-      @type = 1 - @type
-
     # Cuts longer dimension of tile in half.
     shrink: ->
-      if @orientation() is 'vertical'
+      if orientation(@dom) is 'portrait'
         @wrapper().css('width', '100%')
         @wrapper().css('height', '50%')
       else
         @wrapper().css('width', '50%')
         @wrapper().css('height', '100%')
-
-      @flip()
 
     # Wrap the current element in a new container
     enclose: ->
@@ -79,9 +72,15 @@
     fission: (child) ->
       @enclose()
 
-      tile = new Tile(child, @type)
+      tile = new Tile(child)
       @shrink()
-      tile.shrink()
+
+      if orientation(@dom) is 'portrait'
+        tile.wrapper().css('width', '100%')
+        tile.wrapper().css('height', '50%')
+      else
+        tile.wrapper().css('width', '50%')
+        tile.wrapper().css('height', '100%')
 
       container = @wrapper().parent()
       container.append(tile.wrapper())
