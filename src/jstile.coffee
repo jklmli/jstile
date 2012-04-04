@@ -35,7 +35,6 @@
     constructor: (@dom, @type) ->
       @dom.wrap('<div/>')
 
-
       @wrapper().addClass('tile')
       @wrapper().css('float', 'left')
       @wrapper().css('height', '100%')
@@ -64,7 +63,6 @@
         @wrapper().css('height', '100%')
 
       @flip()
-      @generation += 1
 
     # Wrap the current element in a new container
     enclose: ->
