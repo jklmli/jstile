@@ -1,4 +1,4 @@
-SRC = src/
+SRC = src/*.coffee
 DIST = dist/
 NAME = jstile.js
 
