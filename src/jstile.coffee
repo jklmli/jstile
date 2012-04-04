@@ -75,9 +75,10 @@
     # Shrinks, and returns a new Tile filling the newly allocated space.
     fission: (child) ->
       @enclose()
-      @shrink()
 
       tile = new Tile(child, @generation, @type)
+      @shrink()
+      tile.shrink()
 
       container = @wrapper().parent()
       container.append(tile.wrapper())
