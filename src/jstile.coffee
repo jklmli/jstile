@@ -1,7 +1,18 @@
 (($) ->
+
+  # HTML classes associated with each level of tile & container
+  jsTileClass = 'jstile'
+  tileClass = 'tile'
+  tileContainerClass = 'tileContainer'
+
   class Mosaic
     constructor: (element) ->
+
+      # Wrap the first element to create the first tile & parent element
+      element.removeClass(jsTileClass)
       element.wrap('<div/>')
+      element.parent().addClass(jsTileClass)
+      element.addClass('tile')
 
       # Need to call .parent() since .wrap() is non-mutative.
       @dom = element.parent()
@@ -50,12 +61,17 @@
 
     # Shrinks, and returns a new Tile filling the newly allocated space.
     fission: ->
+
+      # Wrap the current element in a new container
       @element.wrap('<div/>')
       container = @element.parent()
+      container.addClass(tileContainerClass)
 
       @shrink()
 
+      # Create the child tile element & add the appropriate class
       child = $('<div></div>')
+      child.addClass(tileClass)
 
       # Mirror dimensions of parent.
       child.width(@element.width())
