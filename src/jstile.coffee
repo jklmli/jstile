@@ -8,20 +8,25 @@
   class Mosaic
     constructor: (element) ->
 
-      # Wrap the first element to create the first tile & parent element
-      element.removeClass(jsTileClass)
+      # Wrap the first element to create the jstile parent element
       element.wrap('<div/>')
       element.parent().addClass(jsTileClass)
-      element.addClass('tile')
+
+      # Wrap the first element to create the tile
+      element.wrap('<div/>')
+      element.parent().addClass('tile')
 
       # Need to call .parent() since .wrap() is non-mutative.
-      @dom = element.parent()
-      @tiles = [new Tile(element, 1, 0)]
+      @dom = element.parent().parent()
+      @tiles = [new Tile(element.parent(), 1, 0)]
 
     # Returns a new tile split from a random oldest tile.
     split: ->
       child = @oldest().fission()
       @tiles.push(child)
+
+      elements = (tile.element for tile in @tiles)
+      console.log(elements...)
 
       child
 
@@ -52,9 +57,11 @@
     # Cuts longer dimension of tile in half.
     shrink: ->
       if @orientation() is 'vertical'
+        @element.width(@element.width())
         @element.height(@element.height()/2)
       else
         @element.width(@element.width()/2)
+        @element.height(@element.height())
 
       @flip()
       @generation += 1
@@ -66,6 +73,10 @@
       @element.wrap('<div/>')
       container = @element.parent()
       container.addClass(tileContainerClass)
+
+      # Mirror current dimensions of tile
+      container.width(@element.width())
+      container.height(@element.height())
 
       @shrink()
 
