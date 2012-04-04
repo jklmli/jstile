@@ -40,8 +40,8 @@
 
       @wrapper().addClass('tile')
       @wrapper().css('float', 'left')
-      @wrapper().css('max-height: 100%')
-      @wrapper().css('max-width: 100%')
+      @wrapper().css('height', '100%')
+      @wrapper().css('width', '100%')
 
     wrapper: ->
       @dom.parent()
@@ -59,11 +59,11 @@
     # Cuts longer dimension of tile in half.
     shrink: ->
       if @orientation() is 'vertical'
-        @wrapper().css('max-width', '100%')
-        @wrapper().css('max-height', '50%')
+        @wrapper().css('width', '100%')
+        @wrapper().css('height', '50%')
       else
-        @wrapper().css('max-width', '50%')
-        @wrapper().css('max-height', '100%')
+        @wrapper().css('width', '50%')
+        @wrapper().css('height', '100%')
 
       @flip()
       @generation += 1
@@ -76,8 +76,8 @@
       container.css('float', 'left')
       container.addClass(tileContainerClass)
 
-      container.css('max-width', @wrapper().css('max-width'))
-      container.css('max-height', @wrapper().css('max-height'))
+      container.css('width', @wrapper().css('width'))
+      container.css('height', @wrapper().css('height'))
 
     # Shrinks, and returns a new Tile filling the newly allocated space.
     fission: (child) ->
