@@ -5,6 +5,7 @@ $(document).ready ->
   $('body').append($("<img src=#{source} style='max-width:100%; max-height:100%'>"));
 
   base = $('img').jstile()
+  rescale()
 
 split = ->
   base.split().element.append('<img>')
