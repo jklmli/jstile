@@ -25,9 +25,6 @@
       child = @oldest().fission()
       @tiles.push(child)
 
-      elements = (tile.element for tile in @tiles)
-      console.log(elements...)
-
       child
 
     # Returns a least-recently-split tile.  If there are several matches,
