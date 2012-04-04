@@ -9,18 +9,16 @@
     constructor: (element) ->
 
       # Wrap the first element to create the first tile & parent element
-      element.removeClass(jsTileClass)
       element.wrap('<div/>')
       element.parent().addClass(jsTileClass)
-      element.addClass('tile')
-
       # Need to call .parent() since .wrap() is non-mutative.
       @dom = element.parent()
+
       @tiles = [new Tile(element, 1, 0)]
 
     # Returns a new tile split from a random oldest tile.
-    split: ->
-      child = @oldest().fission()
+    split: (element) ->
+      child = @oldest().fission(element)
       @tiles.push(child)
 
       child
@@ -37,7 +35,15 @@
       @tiles[minIndex]
 
   class Tile
-    constructor: (@element, @generation, @type) ->
+    constructor: (@dom, @generation, @type) ->
+      @dom.wrap('<div/>')
+
+      @wrapper().addClass('tile')
+      @wrapper().css('max-height: 100%')
+      @wrapper().css('max-width: 100%')
+
+    wrapper: ->
+      @dom.parent()
 
     # A human readable form of @type.
     orientation: ->
@@ -52,34 +58,31 @@
     # Cuts longer dimension of tile in half.
     shrink: ->
       if @orientation() is 'vertical'
-        @element.height(@element.height()/2)
+        @wrapper().css('max-height', '50%')
       else
-        @element.width(@element.width()/2)
+        @wrapper().css('max-width', '50%')
 
       @flip()
       @generation += 1
 
-    # Shrinks, and returns a new Tile filling the newly allocated space.
-    fission: ->
+    # Wrap the current element in a new container
+    enclose: ->
+      @wrapper().wrap('<div/>')
+      container = @wrapper().parent()
 
-      # Wrap the current element in a new container
-      @element.wrap('<div/>')
-      container = @element.parent()
       container.addClass(tileContainerClass)
 
+    # Shrinks, and returns a new Tile filling the newly allocated space.
+    fission: (child) ->
+      @enclose()
       @shrink()
 
-      # Create the child tile element & add the appropriate class
-      child = $('<div></div>')
-      child.addClass(tileClass)
+      tile = new Tile(child, @generation, @type)
 
-      # Mirror dimensions of parent.
-      child.width(@element.width())
-      child.height(@element.height())
+      container = @wrapper().parent()
+      container.append(tile.wrapper())
 
-      container.append(child)
-
-      new Tile(child, @generation, @type)
+      tile
 
   $.fn.jstile = ->
     new Mosaic(this)

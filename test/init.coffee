@@ -2,13 +2,13 @@ base = undefined
 
 $(document).ready ->
   source = "http://placehold.it/#{$(window).width()}x#{$(window).height()}"
-  $('body').append($("<img src=#{source} style='max-width:100%; max-height:100%'>"));
+  $('body').append($("<img src=#{source}>"));
 
   base = $('img').jstile()
   rescale()
 
 split = ->
-  base.split().element.append('<img>')
+  base.split($('<img>'))
   rescale()
 
 rescale = ->
