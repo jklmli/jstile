@@ -20,7 +20,7 @@
     oldest: ->
       generations = (tile.generation for tile in @tiles)
 
-      minGeneration = Math.min.apply(this, generations)
+      minGeneration = Math.min(generations...)
       minIndex = generations.indexOf(minGeneration)
 
       @tiles[minIndex]
