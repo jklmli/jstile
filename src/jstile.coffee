@@ -18,7 +18,7 @@
 
       # Need to call .parent() since .wrap() is non-mutative.
       @dom = element.parent().parent()
-      @tiles = [new Tile(element.parent(), 1, 0)]
+      @tiles = [new Tile(element.parent(), 1, 1)] # Split vertically first
 
     # Returns a new tile split from the oldest tile, break ties left to right, up to down
     split: ->
@@ -41,10 +41,15 @@
 
     # A human readable form of @type.
     orientation: ->
-      if @type is 0
+      if @element.width() >= 2*@element.height()
         'horizontal'
-      else
+      else if @element.height() >= 2*@element.width()
         'vertical'
+      else
+        if @type is 0
+          'horizontal'
+        else
+          'vertical'
 
     # Toggle horizontal/vertical orientation (for next split direction)
     flip: ->
