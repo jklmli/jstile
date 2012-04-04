@@ -46,6 +46,7 @@
       else
         'vertical'
 
+    # Toggle horizontal/vertical orientation (for next split direction)
     flip: ->
       @type = 1 - @type
 
