@@ -72,15 +72,17 @@
     wrapper: ->
       @dom.parent()
 
-    # Cuts longer dimension of tile in half.
     shrink: ->
+      ### Cuts longer dimension of tile in half ###
+    
       if orientation(@dom) is 'portrait'
         shrinkVertically(@wrapper())
       else
         shrinkHorizontally(@wrapper())
 
-    # Wrap the current element in a new container
     enclose: ->
+      ### Wrap the current element in a new container ###
+        
       @wrapper().wrap('<div/>')
       container = @wrapper().parent()
 
@@ -94,8 +96,8 @@
         else
           shrinkHorizontally(container)
 
-    # Removes this tile and expands the sibling to take the place of it and its parent 
     join: (siblingTile) ->
+      ### Removes this tile and expands the sibling to take the place of it and its parent ###
 
       # Expand the sibling element of this tile to replace the parent in the DOM
       siblingElement = siblingTile.wrapper()
@@ -106,8 +108,9 @@
 
       siblingTile
 
-    # Shrinks, and returns a new Tile filling the newly allocated space.
     split: (child) ->
+      ### Shrinks, and returns a new Tile filling the newly allocated space ###
+
       @enclose()
 
       tile = new Tile(child)
