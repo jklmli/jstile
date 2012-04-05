@@ -14,8 +14,10 @@ split = ->
   tile
 
 remove = (tile) ->
-  tile.remove()
+  newTile = base.remove(tile)
   rescale()
+
+  newTile
 
 rescale = ->
   for image in $('img')

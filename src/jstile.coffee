@@ -45,6 +45,26 @@
 
       child
 
+    # Remove some element from the Mosaic (merging it with its sibling)
+    remove: (tile) ->
+
+      # Find the tile & its sibling in the queue of tiles
+      tileIndex = @tiles.indexOf(tile)
+      siblingTileIndex = tileIndex - 1
+      siblingTile = @tiles[siblingTileIndex]
+
+      # Remove both tiles from the queue
+      @tiles.splice(Math.min(siblingTileIndex, tileIndex), 2)
+
+      # Remove the tile from the DOM
+      newTile = tile.remove(siblingTile)
+
+      # Re-insert the sibling element at the front of the queue
+      @tiles.splice(0,0,siblingTile)
+
+      newTile
+      
+
   class Tile
     constructor: (@dom) ->
       @dom.wrap('<div/>')
@@ -80,16 +100,16 @@
           shrinkHorizontally(container)
 
     # Removes this tile and expands the sibling to take the place of it and its parent 
-    remove : ->
+    remove : (siblingTile) ->
 
-      # Expand the sibling of this tile to replace the parent in the DOM
-      sibling = @wrapper().siblings()
+      # Expand the sibling element of this tile to replace the parent in the DOM
+      siblingElement = siblingTile.wrapper()
       @wrapper().remove()
-      sibling.parent().html(sibling.html())
+      siblingElement.unwrap()
+      siblingElement.css('width', siblingElement.siblings().css('width'))
+      siblingElement.css('height', siblingElement.siblings().css('height'))
 
-      # Remove this element from the list of tiles
-
-
+      siblingTile
 
     # Shrinks, and returns a new Tile filling the newly allocated space.
     split: (child) ->
