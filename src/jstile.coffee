@@ -32,7 +32,7 @@
       @tiles = [new Tile(element, 0)]
 
     # Returns a new tile split from the oldest tile, break ties left to right, up to down
-    split: (element) ->
+    add: (element) ->
 
       # Pull off the oldest tile from the front of the queue
       oldest = @tiles[0]
@@ -57,7 +57,7 @@
       @tiles.splice(Math.min(siblingTileIndex, tileIndex), 2)
 
       # Remove the tile from the DOM
-      newTile = tile.remove(siblingTile)
+      newTile = tile.join(siblingTile)
 
       # Re-insert the sibling element at the front of the queue
       @tiles.splice(0,0,siblingTile)
@@ -100,7 +100,7 @@
           shrinkHorizontally(container)
 
     # Removes this tile and expands the sibling to take the place of it and its parent 
-    remove : (siblingTile) ->
+    join: (siblingTile) ->
 
       # Expand the sibling element of this tile to replace the parent in the DOM
       siblingElement = siblingTile.wrapper()

@@ -7,8 +7,8 @@ $(document).ready ->
   base = $('img').jstile()
   rescale()
 
-split = ->
-  tile = base.split($('<img>'))
+add = ->
+  tile = base.add($('<img>'))
   rescale()
 
   tile
