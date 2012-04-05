@@ -13,6 +13,10 @@ split = ->
 
   tile
 
+remove = (tile) ->
+  tile.remove()
+  rescale()
+
 rescale = ->
   for image in $('img')
     $(image).attr('src', "http://placehold.it/#{$(image).parent().width()}x#{$(image).parent().height()}")

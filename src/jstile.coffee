@@ -79,6 +79,13 @@
         else
           shrinkHorizontally(container)
 
+    # Removes this tile and expands the sibling to take the place of it and its parent 
+    remove : ->
+
+      # Expand the sibling of this tile to replace the parent in the DOM
+      sibling = @wrapper().siblings()
+      @wrapper().remove()
+      sibling.parent().html(sibling.html())
 
     # Shrinks, and returns a new Tile filling the newly allocated space.
     fission: (child) ->
