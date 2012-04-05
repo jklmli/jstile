@@ -8,16 +8,16 @@ $(document).ready ->
   rescale()
 
 add = ->
-  tile = base.add($('<img>'))
-  rescale()
-
-  tile
-
-remove = (tile) ->
-  newTile = base.remove(tile)
+  newTile = base.add($('<img>'))
   rescale()
 
   newTile
+
+remove = (tile) ->
+  replacementTile = base.remove(tile)
+  rescale()
+
+  replacementTile
 
 rescale = ->
   for image in $('img')
