@@ -34,14 +34,14 @@
 
     # Returns a new tile split from the oldest tile, break ties left to right, up to down
     split: (element) ->
+
       # Pull off the oldest tile from the front of the queue
       oldest = @tiles[0]
       child = oldest.fission(element)
 
       # Push the split tiles to the end of the tiles queue
       @tiles.push(oldest)
-      @tiles.shift()
-
+      @tiles.shift() # Dequeue the previously 'oldest' tile
       @tiles.push(child)
 
       child
@@ -73,8 +73,16 @@
       container.css('float', 'left')
       container.addClass(tileContainerClass)
 
-      container.css('width', @wrapper().css('width'))
-      container.css('height', @wrapper().css('height'))
+      container.css('width', '100%')
+      container.css('height', '100%')
+
+      # Split the container if it's not the top-level container
+      if not container.parent().hasClass('jstile')
+        if orientation(container.parent()) is 'portrait'
+          shrinkVertically(container)
+        else
+          shrinkHorizontally(container)
+
 
     # Shrinks, and returns a new Tile filling the newly allocated space.
     fission: (child) ->
