@@ -22,11 +22,10 @@
 
   class Mosaic
     constructor: (element) ->
+
       # Wrap the first element to create the first tile & parent element
       element.wrap('<div/>')
       element.parent().addClass(jsTileClass)
-
-      # TODO: element.parent() should mirror size of element
 
       # Need to call .parent() since .wrap() is non-mutative.
       @dom = element.parent()
