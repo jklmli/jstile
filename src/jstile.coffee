@@ -16,50 +16,45 @@
     element.css('height', '50%')
 
   # HTML classes associated with each level of tile & container
-  jsTileClass = 'jstile'
-  tileClass = 'tile'
-  tileContainerClass = 'tileContainer'
+  jsTileClass = 'jstile' # Top-level jstile object
+  tileClass = 'tile' # Bottom-level single tile object
+  tileContainerClass = 'tileContainer' # Inner layers
 
   class Mosaic
-    constructor: (element) ->
 
-      # Wrap the first element to create the first tile & parent element
+    constructor: (element) ->
+      ### Creates a top-level Mosaic object from a given jQuery element ###
+
       element.wrap('<div/>')
       element.parent().addClass(jsTileClass)
 
-      # Need to call .parent() since .wrap() is non-mutative.
       @dom = element.parent()
       @tiles = [new Tile(element, 0)]
 
-    # Returns a new tile split from the oldest tile, break ties left to right, up to down
     add: (element) ->
+      ### Returns a new tile split from the oldest tile, break ties left to right, up to down ###
 
-      # Pull off the oldest tile from the front of the queue
-      oldest = @tiles[0]
-      child = oldest.split(element)
+      oldestTile = @tiles[0]
+      newTile = oldestTile.split(element)
 
       # Push the split tiles to the end of the tiles queue
-      @tiles.push(oldest)
+      @tiles.push(oldestTile)
       @tiles.shift() # Dequeue the previously 'oldest' tile
-      @tiles.push(child)
+      @tiles.push(newTile)
 
-      child
+      newTile
 
-    # Remove some element from the Mosaic (merging it with its sibling)
     remove: (tile) ->
+      ### Remove some element from the Mosaic (merging it with its sibling) ###
 
       # Find the tile & its sibling in the queue of tiles
       tileIndex = @tiles.indexOf(tile)
       siblingTileIndex = tileIndex - 1
       siblingTile = @tiles[siblingTileIndex]
 
-      # Remove both tiles from the queue
+      # Remove both tiles from the queue, remove tile from DOM, and re-insert new tile at beginning of queue
       @tiles.splice(Math.min(siblingTileIndex, tileIndex), 2)
-
-      # Remove the tile from the DOM
       newTile = tile.join(siblingTile)
-
-      # Re-insert the sibling element at the front of the queue
       @tiles.splice(0,0,siblingTile)
 
       newTile
