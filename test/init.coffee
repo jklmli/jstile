@@ -2,7 +2,7 @@ base = undefined
 
 $(document).ready ->
   source = "http://placehold.it/#{$(window).width()}x#{$(window).height()}"
-  $('body').append($("<img src=#{source}>"));
+  $('body').append($("<img src=#{source}>"))
 
   base = $('img').jstile()
   rescale()
