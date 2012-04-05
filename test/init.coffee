@@ -2,17 +2,16 @@ base = undefined
 
 $(document).ready ->
   source = "http://placehold.it/#{$(window).width()}x#{$(window).height()}"
-  $('body').append($("<img src=#{source} style='max-width:100%; max-height:100%'>"))
+  $('body').append($("<img src=#{source}>"));
 
   base = $('img').jstile()
   rescale()
 
 split = ->
-  tile = base.split()
-  tile.element.append('<img/>')
+  tile = base.split($('<img>'))
   rescale()
-  tile
 
+  tile
 
 rescale = ->
   for image in $('img')

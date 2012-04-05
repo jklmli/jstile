@@ -1,5 +1,20 @@
 (($) ->
 
+  # Takes in jQuery object
+  orientation = (element) ->
+    if element.width() > element.height()
+      'landscape'
+    else
+      'portrait'
+
+  shrinkHorizontally = (element) ->
+    element.css('width', '50%')
+    element.css('height', '100%')
+
+  shrinkVertically = (element) ->
+    element.css('width', '100%')
+    element.css('height', '50%')
+
   # HTML classes associated with each level of tile & container
   jsTileClass = 'jstile'
   tileClass = 'tile'
@@ -7,91 +22,76 @@
 
   class Mosaic
     constructor: (element) ->
-
-      # Wrap the first element to create the jstile parent element
+      # Wrap the first element to create the first tile & parent element
       element.wrap('<div/>')
       element.parent().addClass(jsTileClass)
 
-      # Wrap the first element to create the tile
-      element.wrap('<div/>')
-      element.parent().addClass('tile')
+      # TODO: element.parent() should mirror size of element
 
       # Need to call .parent() since .wrap() is non-mutative.
-      @dom = element.parent().parent()
-      @tiles = [new Tile(element.parent(), 1, 1)] # Split vertically first
+      @dom = element.parent()
+      @tiles = [new Tile(element, 0)]
 
     # Returns a new tile split from the oldest tile, break ties left to right, up to down
-    split: ->
-
+    split: (element) ->
       # Pull off the oldest tile from the front of the queue
       oldest = @tiles[0]
-      child = oldest.fission()
+      child = oldest.fission(element)
 
       # Push the split tiles to the end of the tiles queue
       @tiles.push(oldest)
-      @tiles.push(child)
-
-      # Remove the tile split from the front of the queue
       @tiles.shift()
+
+      @tiles.push(child)
 
       child
 
   class Tile
-    constructor: (@element, @generation, @type) ->
+    constructor: (@dom) ->
+      @dom.wrap('<div/>')
 
-    # A human readable form of @type.
-    orientation: ->
-      if @element.width() >= 2*@element.height()
-        'horizontal'
-      else if @element.height() >= 2*@element.width()
-        'vertical'
-      else
-        if @type is 0
-          'horizontal'
-        else
-          'vertical'
+      @wrapper().addClass('tile')
+      @wrapper().css('float', 'left')
+      @wrapper().css('height', '100%')
+      @wrapper().css('width', '100%')
 
-    # Toggle horizontal/vertical orientation (for next split direction)
-    flip: ->
-      @type = 1 - @type
+    wrapper: ->
+      @dom.parent()
 
     # Cuts longer dimension of tile in half.
     shrink: ->
-      if @orientation() is 'vertical'
-        @element.width(@element.width())
-        @element.height(@element.height()/2)
+      if orientation(@dom) is 'portrait'
+        shrinkVertically(@wrapper())
       else
-        @element.width(@element.width()/2)
-        @element.height(@element.height())
+        shrinkHorizontally(@wrapper())
 
-      @flip()
-      @generation += 1
+    # Wrap the current element in a new container
+    enclose: ->
+      @wrapper().wrap('<div/>')
+      container = @wrapper().parent()
 
-    # Shrinks, and returns a new tile filling the newly allocated space.
-    fission: ->
-
-      # Wrap the current element in a new container
-      @element.wrap('<div/>')
-      container = @element.parent()
+      container.css('float', 'left')
       container.addClass(tileContainerClass)
 
-      # Mirror current dimensions of tile
-      container.width(@element.width())
-      container.height(@element.height())
+      container.css('width', @wrapper().css('width'))
+      container.css('height', @wrapper().css('height'))
 
+    # Shrinks, and returns a new Tile filling the newly allocated space.
+    fission: (child) ->
+      @enclose()
+
+      tile = new Tile(child)
       @shrink()
 
-      # Create the child tile element & add the appropriate class
-      child = $('<div></div>')
-      child.addClass(tileClass)
+      if orientation(@dom) is 'portrait'
+        shrinkVertically(tile.wrapper())
+      else
+        shrinkHorizontally(tile.wrapper())
 
-      # Mirror dimensions of parent.
-      child.width(@element.width())
-      child.height(@element.height())
+      container = @wrapper().parent()
+      container.append(tile.wrapper())
 
-      container.append(child)
-
-      new Tile(child, @generation, @type)
+      tile
 
   $.fn.jstile = ->
     new Mosaic(this)
