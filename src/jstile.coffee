@@ -73,9 +73,6 @@
       container.css('float', 'left')
       container.addClass(tileContainerClass)
 
-      container.css('width', '100%')
-      container.css('height', '100%')
-
       # Split the container if it's not the top-level container
       if not container.parent().hasClass('jstile')
         if orientation(container.parent()) is 'portrait'
