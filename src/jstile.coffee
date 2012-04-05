@@ -36,7 +36,7 @@
 
       # Pull off the oldest tile from the front of the queue
       oldest = @tiles[0]
-      child = oldest.fission(element)
+      child = oldest.split(element)
 
       # Push the split tiles to the end of the tiles queue
       @tiles.push(oldest)
@@ -87,8 +87,12 @@
       @wrapper().remove()
       sibling.parent().html(sibling.html())
 
+      # Remove this element from the list of tiles
+
+
+
     # Shrinks, and returns a new Tile filling the newly allocated space.
-    fission: (child) ->
+    split: (child) ->
       @enclose()
 
       tile = new Tile(child)
