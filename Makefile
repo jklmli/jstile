@@ -1,4 +1,4 @@
-SRC = src/*.coffee
+all: build
 
 build:
 	coffee -cb test/init.coffee
