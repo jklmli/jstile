@@ -1,9 +1,11 @@
-.tileContainer {
-  width: inherit;
-  height: inherit;
+body {
+  margin: 0px;
 }
 
 .jstile {
-  width:inherit;
-  height:inherit;
+}
+
+.imageWrapper {
+  width: 100%;
+  height: 100%;
 }

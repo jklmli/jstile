@@ -1,15 +1,13 @@
 mosaic = undefined
 
 $(document).ready ->
-  source = "http://placehold.it/#{$(window).width()}x#{$(window).height()}"
   $('body').append($("<div id='mosaic'/>"))
-
   mosaic = $('#mosaic').jstile()
   add()
   rescale()
 
 add = ->
-  newTile = mosaic.add($('<img>'))
+  newTile = mosaic.add($('<img/>'))
   rescale()
 
   newTile

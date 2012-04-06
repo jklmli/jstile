@@ -108,8 +108,8 @@
       siblingElement = siblingTile.wrapper()
       @wrapper().remove()
       siblingElement.unwrap()
-      siblingElement.css('width', siblingElement.siblings().css('width'))
-      siblingElement.css('height', siblingElement.siblings().css('height'))
+      siblingElement.css('width', siblingElement.siblings('.tile').css('width'))
+      siblingElement.css('height', siblingElement.siblings('.tile').css('height'))
 
       siblingTile
 
