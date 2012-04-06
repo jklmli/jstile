@@ -21,26 +21,32 @@
   tileContainerClass = 'tileContainer' # Inner layers
 
   class Mosaic
+    constructor: (@dom) ->
+      ### Creates a top-level Mosaic object from a given jQuery element, with no tiles or tile containers ###
 
-    constructor: (element) ->
-      ### Creates a top-level Mosaic object from a given jQuery element ###
-
-      element.wrap('<div/>')
-      element.parent().addClass(jsTileClass)
-
-      @dom = element.parent()
-      @tiles = [new Tile(element, 0)]
+      @dom.addClass(jsTileClass)
+      @tiles = []
 
     add: (element) ->
-      ### Returns a new tile split from the oldest tile, break ties left to right, up to down ###
+      ### Returns a new tile split from the oldest tile, break ties left to right, up to down. If no existing tiles, add first ###
 
-      oldestTile = @tiles[0]
-      newTile = oldestTile.split(element)
+      if @tiles.length > 0
 
-      # Push the split tiles to the end of the tiles queue
-      @tiles.push(oldestTile)
-      @tiles.shift() # Dequeue the previously 'oldest' tile
-      @tiles.push(newTile)
+        # Split oldest existing tile 
+        oldestTile = @tiles[0]
+        newTile = oldestTile.split(element)
+
+        # Push the split tiles to the end of the tiles queue
+        @tiles.push(oldestTile)
+        @tiles.shift() # Dequeue the previously 'oldest' tile
+        @tiles.push(newTile)
+
+      else
+
+        # Create new tile and top-level tile 
+        newTile = new Tile(element, 0)
+        @tiles.push(newTile)
+        @dom.append(newTile.wrapper())
 
       newTile
 
@@ -58,8 +64,7 @@
       @tiles.splice(0,0,siblingTile)
 
       newTile
-      
-
+     
   class Tile
     constructor: (@dom) ->
       @dom.wrap('<div/>')

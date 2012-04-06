@@ -1,20 +1,21 @@
-base = undefined
+mosaic = undefined
 
 $(document).ready ->
   source = "http://placehold.it/#{$(window).width()}x#{$(window).height()}"
-  $('body').append($("<img src=#{source}>"))
+  $('body').append($("<div/>"))
 
-  base = $('img').jstile()
+  mosaic = $('div').jstile()
+  add()
   rescale()
 
 add = ->
-  newTile = base.add($('<img>'))
+  newTile = mosaic.add($('<img>'))
   rescale()
 
   newTile
 
 remove = (tile) ->
-  replacementTile = base.remove(tile)
+  replacementTile = mosaic.remove(tile)
   rescale()
 
   replacementTile
