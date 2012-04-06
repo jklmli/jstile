@@ -3,5 +3,5 @@
 *.iml
 
 # Compiled
-dist/
+src/jstile.js
 test/init.js
