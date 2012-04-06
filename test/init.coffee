@@ -7,13 +7,20 @@ $(document).ready ->
   rescale()
 
 add = ->
-  newTile = mosaic.add($('<img/>'))
+  newElement = $('<img/>')
+  newTile = mosaic.add(newElement)
+  newElement.click(->
+    remove(newTile)
+  )
   rescale()
 
   newTile
 
 remove = (tile) ->
   replacementTile = mosaic.remove(tile)
+  replacementTile.dom.click(->
+    remove(newTile)
+  )
   rescale()
 
   replacementTile
