@@ -91,7 +91,7 @@
       orientElement(@dom, @wrapper())
 
     enclose: ->
-      ### Wrap the current element in a new container ###
+      ### Wrap the current element in a new tile container ###
         
       @wrapper().wrap('<div/>')
       container = @wrapper().parent()
