@@ -1,20 +1,23 @@
 (($) ->
 
-  # Takes in jQuery object
+  # Gets the orientation of e jQuery element 
   orientation = (element) ->
     if element.width() > element.height()
       'landscape'
     else
       'portrait'
 
+  # Orients an element horizontally (using relative sizes)
   orientHorizontally = (element) ->
     element.css('width', '50%')
     element.css('height', '100%')
 
+  # Orients an element vertically (using relative sizes)
   orientVertically = (element) ->
     element.css('width', '100%')
     element.css('height', '50%')
 
+  # Orients some 'targetElement' based on the size 'sourceElement'
   orientElement = (sourceElement, targetElement) ->
     if orientation(sourceElement) is 'portrait'
       orientVertically(targetElement)
