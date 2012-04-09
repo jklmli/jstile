@@ -85,7 +85,7 @@
 
     shrink: ->
       ### Cuts longer dimension of tile in half ###
-      orient(@dom, @wrapper())
+      orientElement(@dom, @wrapper())
 
     enclose: ->
       ### Wrap the current element in a new container ###
@@ -98,7 +98,7 @@
 
       # Split the container if it's not the top-level container
       if not container.parent().hasClass('jstile')
-        orient(container.parent(), container)
+        orientElement(container.parent(), container)
 
     join: (siblingTile) ->
       ### Removes this tile and expands the sibling to take the place of it and its parent ###
@@ -119,7 +119,7 @@
 
       tile = new Tile(child)
       @shrink()
-      orient(@dom, tile.wrapper())
+      orientElement(@dom, tile.wrapper())
 
       container = @wrapper().parent()
       container.append(tile.wrapper())
