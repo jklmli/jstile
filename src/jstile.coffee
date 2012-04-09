@@ -103,12 +103,12 @@
     join: (siblingTile) ->
       ### Removes this tile and expands the sibling to take the place of it and its parent ###
 
-      # Expand the sibling element of this tile to replace the parent in the DOM
       siblingElement = siblingTile.wrapper()
-      @wrapper().remove()
+
+      orientElement(siblingElement, siblingElement)
+
       siblingElement.unwrap()
-      siblingElement.css('width', siblingElement.siblings('.tile').css('width'))
-      siblingElement.css('height', siblingElement.siblings('.tile').css('height'))
+      @wrapper().remove()
 
       siblingTile
 
