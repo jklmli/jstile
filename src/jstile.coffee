@@ -29,15 +29,17 @@
   tileClass = 'tile' # Bottom-level single tile object
   tileContainerClass = 'tileContainer' # Inner layers
 
+  ### Top-level object that contains a tree, with leaves as Tile objects ###
   class Mosaic
+
+    ### Creates a top-level Mosaic object from a given jQuery element, with no tiles or tile containers ###
     constructor: (@dom) ->
-      ### Creates a top-level Mosaic object from a given jQuery element, with no tiles or tile containers ###
 
       @dom.addClass(jsTileClass)
       @tiles = []
 
+    ### Returns a new tile split from the oldest tile, break ties left to right, up to down. If no existing tiles, add first ###
     add: (element) ->
-      ### Returns a new tile split from the oldest tile, break ties left to right, up to down. If no existing tiles, add first ###
 
       if @tiles.length > 0
 
@@ -59,8 +61,8 @@
 
       newTile
 
+    ### Remove some element from the Mosaic (merging it with its sibling) ###
     remove: (tile) ->
-      ### Remove some element from the Mosaic (merging it with its sibling) ###
 
       # Find the tile & its sibling in the queue of tiles
       tileIndex = @tiles.indexOf(tile)
@@ -74,6 +76,7 @@
 
       newTile
      
+  # Bottom-level object that wraps some user DOM structure
   class Tile
     constructor: (@dom) ->
       @dom.wrap('<div/>')
@@ -86,12 +89,12 @@
     wrapper: ->
       @dom.parent()
 
+    ### Cuts longer dimension of tile in half ###
     orient: ->
-      ### Cuts longer dimension of tile in half ###
       orientElement(@dom, @wrapper())
 
+    ### Wrap the current element in a new tile container ###
     enclose: ->
-      ### Wrap the current element in a new tile container ###
         
       @wrapper().wrap('<div/>')
       container = @wrapper().parent()
@@ -103,8 +106,8 @@
       if not container.parent().hasClass('jstile')
         orientElement(container.parent(), container)
 
+    ### Removes this tile and expands the sibling to take the place of it and its parent ###
     merge: (siblingTile) ->
-      ### Removes this tile and expands the sibling to take the place of it and its parent ###
     
       @wrapper().unwrap()
       siblingTile.wrapper().remove()
@@ -112,8 +115,8 @@
 
       siblingTile
 
+    ### Shrinks, and returns a new Tile filling the newly allocated space ###
     split: (child) ->
-      ### Shrinks, and returns a new Tile filling the newly allocated space ###
 
       @enclose()
 
