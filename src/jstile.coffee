@@ -7,19 +7,19 @@
     else
       'portrait'
 
-  shrinkHorizontally = (element) ->
+  orientHorizontally = (element) ->
     element.css('width', '50%')
     element.css('height', '100%')
 
-  shrinkVertically = (element) ->
+  orientVertically = (element) ->
     element.css('width', '100%')
     element.css('height', '50%')
 
-  resize = (sourceElement, targetElement) ->
+  orientElement = (sourceElement, targetElement) ->
     if orientation(sourceElement) is 'portrait'
-      shrinkVertically(targetElement)
+      orientVertically(targetElement)
     else
-      shrinkHorizontally(targetElement)
+      orientHorizontally(targetElement)
 
   # HTML classes associated with each level of tile & container
   jsTileClass = 'jstile' # Top-level jstile object
@@ -85,7 +85,7 @@
 
     shrink: ->
       ### Cuts longer dimension of tile in half ###
-      resize(@dom, @wrapper())
+      orient(@dom, @wrapper())
 
     enclose: ->
       ### Wrap the current element in a new container ###
@@ -98,7 +98,7 @@
 
       # Split the container if it's not the top-level container
       if not container.parent().hasClass('jstile')
-        resize(container.parent(), container)
+        orient(container.parent(), container)
 
     join: (siblingTile) ->
       ### Removes this tile and expands the sibling to take the place of it and its parent ###
@@ -119,7 +119,7 @@
 
       tile = new Tile(child)
       @shrink()
-      resize(@dom, tile.wrapper())
+      orient(@dom, tile.wrapper())
 
       container = @wrapper().parent()
       container.append(tile.wrapper())
