@@ -66,7 +66,7 @@
 
       # Remove both tiles from the queue, remove tile from DOM, and re-insert new tile at beginning of queue
       @tiles.splice(Math.min(siblingTileIndex, tileIndex), 2)
-      newTile = tile.join(siblingTile)
+      newTile = siblingTile.merge(tile)
       @tiles.splice(0,0,siblingTile)
 
       newTile
@@ -83,7 +83,7 @@
     wrapper: ->
       @dom.parent()
 
-    shrink: ->
+    orient: ->
       ### Cuts longer dimension of tile in half ###
       orientElement(@dom, @wrapper())
 
@@ -100,15 +100,12 @@
       if not container.parent().hasClass('jstile')
         orientElement(container.parent(), container)
 
-    join: (siblingTile) ->
+    merge: (siblingTile) ->
       ### Removes this tile and expands the sibling to take the place of it and its parent ###
-
-      siblingElement = siblingTile.wrapper()
-
-      orientElement(siblingElement, siblingElement)
-
-      siblingElement.unwrap()
-      @wrapper().remove()
+    
+      @wrapper().unwrap()
+      siblingTile.wrapper().remove()
+      @orient()
 
       siblingTile
 
@@ -118,7 +115,7 @@
       @enclose()
 
       tile = new Tile(child)
-      @shrink()
+      @orient()
       orientElement(@dom, tile.wrapper())
 
       container = @wrapper().parent()
