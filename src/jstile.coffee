@@ -78,10 +78,12 @@
      
   # Bottom-level object that wraps some user DOM structure
   class Tile
+
+    ### Creates a Tile object, wrapping the given DOM structure with a tile container ###
     constructor: (@dom) ->
       @dom.wrap('<div/>')
 
-      @wrapper().addClass('tile')
+      @wrapper().addClass(tileClass)
       @wrapper().css('float', 'left')
       @wrapper().css('height', '100%')
       @wrapper().css('width', '100%')
@@ -103,7 +105,7 @@
       container.addClass(tileContainerClass)
 
       # Split the container if it's not the top-level container
-      if not container.parent().hasClass('jstile')
+      if not container.parent().hasClass(jsTileClass)
         orientElement(container.parent(), container)
 
     ### Removes this tile and expands the sibling to take the place of it and its parent ###
