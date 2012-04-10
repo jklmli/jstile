@@ -15,13 +15,15 @@ add = ->
   )
   rescale()
 
-  newTile
-
 remove = (tile) ->
-  mosaic.remove(tile)
-  rescale()
+    #mosaic.remove(tile)
+    #rescale()
+  tile.dom.click(->
+    remove(tile)
+  )
 
-  tile
+  console.log(tile.wrapper())
+  console.log(tile.sibling.wrapper())
 
 rescale = ->
   for image in $('img')

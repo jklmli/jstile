@@ -75,12 +75,6 @@
         tile.merge()
         @tiles.splice(0,0,siblingTileIndex)
 
-        tile
-
-      else
-
-        null
-     
   # Bottom-level object that wraps some user DOM structure
   class Tile
 
@@ -112,25 +106,29 @@
     ### Removes the sibling tile and expands this to take the place of it and its parent ###
     merge: ->
     
-      if @sibling
-        orientElement(@dom, @wrapper())
+      if @sibling is not null
+        orientElement(@wrapper(), @wrapper().parent())
         @wrapper().unwrap()
         @sibling.wrapper().remove()
         @sibling = null
 
     ### Shrinks, and returns a new Tile filling the newly allocated space ###
-    split: (child) ->
+    split: (newElement) ->
 
       @enclose()
 
-      tile = new Tile(child, this)
+      newTile = new Tile(newElement, this)
       orientElement(@dom, @wrapper())
-      orientElement(@dom, tile.wrapper())
+      orientElement(@dom, newTile.wrapper())
 
       container = @wrapper().parent()
-      container.append(tile.wrapper())
+      container.append(newTile.wrapper())
 
-      tile
+      if @sibling is not null
+        @sibling.sibling = null
+      @sibling = newTile
+
+      newTile
 
   $.fn.jstile = ->
     new Mosaic(this)
