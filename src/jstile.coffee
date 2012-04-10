@@ -92,15 +92,20 @@
 
       if tile.sibling isnt null
 
-        # Find the tile & its sibling in the queue of tiles
-        tileIndex = @tiles.indexOf(tile)
-        siblingTileIndex = @tiles.indexOf(tile.sibling)
+        # Find the tile & its sibling in the queue of leaf tiles, and remove them
+        tileIndex = @leafTiles.indexOf(tile)
+        siblingTileIndex = @leafTiles.indexOf(tile.sibling)
+        @leafTiles.splice(siblingTileIndex, 1)
+        @leafTiles.splice(tileIndex, 1)
 
-        # Remove both tiles from the queue, remove tile from DOM, and re-insert new tile at beginning of queue
-        @tiles.splice(siblingTileIndex, 1)
-        @tiles.splice(tileIndex, 1)
-        tile.merge()
-        @tiles.splice(0,0,tile)
+        # Remove both tiles from the queue, remove tile from DOM, and re-insert replacement tile at beginning of queue
+        parentTile = tile.parent
+        replacementTile = parentTile.merge(tile)
+        @leafTiles.splice(0, 0, replacementTile)
+
+      else
+
+        console.log('Cannot remove tile without a sibling element')
 
   # Node objects that form a tile tree (full binary tree, each node contains a parent, and 0 or 2 children)
   class Tile
@@ -130,21 +135,40 @@
       container.addClass(tileContainerClass)
       container.css('float', 'left')
 
+      @matchSiblingOrientation(container)
+
+    matchSiblingOrientation: (element) ->
       if @sibling isnt null
-        orientElement(@sibling.wrapper(), container, true)
+        orientElement(@sibling.wrapper(), element, true)
       else
-        container.css('height', '100%')
-        container.css('width', '100%')
+        element.css('height', '100%')
+        element.css('width', '100%')
 
-    ### Removes the sibling tile and expands this to take the place of it and its parent ###
-    merge: ->
+    ### Merge this children of this tile, removing the given tile from the tree ###
+    merge: (tileToRemove) ->
     
-      orientElement(@wrapper(), @wrapper().parent())
-      @wrapper().unwrap()
-      @sibling.wrapper().remove()
-      @sibling = null
+      # Find which child to remove
+      if tileToRemove is @leftChild
+        tileToKeep = @rightChild
+      else
+        tileToKeep = @leftChild
 
-    ### Shrinks, and returns a new Tile filling the newly allocated space ###
+      # Remove the tile to remove's elements from the DOM
+      tileToRemove.wrapper().remove()
+      tileToKeep.wrapper().unwrap()
+
+      # Assimilate the children tiles
+      @dom = tileToKeep.dom
+      @matchSiblingOrientation(@wrapper())
+      @leftChild = tileToKeep.leftChild
+      @rightChild = tileToKeep.rightChild
+      if @leftChild isnt null or @rightChild isnt null
+        @wrapper().removeClass(tileContainerClass)
+        @wrapper().addClass(tileClass)
+
+      return this
+
+    ### Given some new element, split this tile to add two children tiles ###
     split: (newElement) ->
 
       # Create the tile container DOM element, wrapping the current DOM

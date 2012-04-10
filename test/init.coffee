@@ -11,11 +11,11 @@ add = (log=true) ->
   newElement = $('<img/>')
   newTiles = mosaic.add(newElement)
   newElement.click(->
-    remove(newTile)
+    remove(newTiles[1])
   )
   rescale()
 
-  if log
+  if log and false
     console.log(newTiles[0].wrapper())
     console.log(newTiles[1].wrapper())
 
