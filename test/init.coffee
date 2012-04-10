@@ -4,26 +4,27 @@ $(document).ready ->
   $('body').append($("<div id='mosaic'/>"))
   mosaic = $('#mosaic').jstile()
   $('#mosaic').rightClick(add)
-  add()
+  add(log=false)
   rescale()
 
-add = ->
+add = (log=true) ->
   newElement = $('<img/>')
-  newTile = mosaic.add(newElement)
+  newTiles = mosaic.add(newElement)
   newElement.click(->
     remove(newTile)
   )
   rescale()
 
-remove = (tile) ->
-    #mosaic.remove(tile)
-    #rescale()
-  tile.dom.click(->
-    remove(tile)
-  )
+  if log
+    console.log(newTiles[0].wrapper())
+    console.log(newTiles[1].wrapper())
 
-  console.log(tile.wrapper())
-  console.log(tile.sibling.wrapper())
+remove = (tile) ->
+  mosaic.remove(tile)
+  rescale()
+  #tile.dom.click(->
+  #  remove(tile)
+  #)
 
 rescale = ->
   for image in $('img')
