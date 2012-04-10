@@ -16,8 +16,8 @@
 
   # Orients an element horizontally (using relative sizes)
   orientHorizontally = (element) ->
-    element.css('height', '50%')
     element.css('width', '100%')
+    element.css('height', '50%')
 
   # Orients an element vertically (using relative sizes)
   orientVertically = (element) ->
@@ -128,11 +128,11 @@
       container = @wrapper().parent()
 
       container.addClass(tileContainerClass)
+      container.css('float', 'left')
 
-      if @sibling is not null
+      if @sibling isnt null
         orientElement(@sibling.wrapper(), container, true)
       else
-        container.css('float', 'left')
         container.css('height', '100%')
         container.css('width', '100%')
 
@@ -159,8 +159,8 @@
       # Update the DOM and orient the children DOM elements
       @dom = @wrapper().parent()
       @dom.append(@rightChild.wrapper())
-      orientElement(@dom, @leftChild.wrapper(), false)
-      orientElement(@dom, @rightChild.wrapper(), false)
+      orientAutomatically(@dom, @leftChild.wrapper())
+      orientAutomatically(@dom, @rightChild.wrapper())
 
       [@leftChild, @rightChild]
 
