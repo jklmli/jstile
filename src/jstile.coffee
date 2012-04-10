@@ -160,6 +160,8 @@
       # Assimilate the children tiles
       @dom = tileToKeep.dom
       @matchSiblingOrientation(@wrapper())
+
+      # Get a handle on the subtrees of the child tile to keep
       @leftChild = tileToKeep.leftChild
       @rightChild = tileToKeep.rightChild
       if @leftChild isnt null or @rightChild isnt null
