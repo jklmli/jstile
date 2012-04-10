@@ -55,7 +55,7 @@
       else
 
         # Create new tile and top-level tile 
-        newTile = new Tile(element, 0)
+        newTile = new Tile(element, null)
         @tiles.push(newTile)
         @dom.append(newTile.wrapper())
 
@@ -64,23 +64,28 @@
     ### Remove some element from the Mosaic (merging it with its sibling) ###
     remove: (tile) ->
 
-      # Find the tile & its sibling in the queue of tiles
-      tileIndex = @tiles.indexOf(tile)
-      siblingTileIndex = tileIndex - 1
-      siblingTile = @tiles[siblingTileIndex]
+      if tile.sibling
 
-      # Remove both tiles from the queue, remove tile from DOM, and re-insert new tile at beginning of queue
-      @tiles.splice(Math.min(siblingTileIndex, tileIndex), 2)
-      newTile = siblingTile.merge(tile)
-      @tiles.splice(0,0,siblingTile)
+        # Find the tile & its sibling in the queue of tiles
+        tileIndex = @tiles.indexOf(tile)
+        siblingTileIndex = @tiles.indexOf(tile.sibling)
 
-      newTile
+        # Remove both tiles from the queue, remove tile from DOM, and re-insert new tile at beginning of queue
+        @tiles.splice(Math.min(siblingTileIndex, tileIndex), 2)
+        tile.merge()
+        @tiles.splice(0,0,siblingTileIndex)
+
+        tile
+
+      else
+
+        null
      
   # Bottom-level object that wraps some user DOM structure
   class Tile
 
     ### Creates a Tile object, wrapping the given DOM structure with a tile container ###
-    constructor: (@dom) ->
+    constructor: (@dom, @sibling) ->
       @dom.wrap('<div/>')
 
       @wrapper().addClass(tileClass)
@@ -90,10 +95,6 @@
 
     wrapper: ->
       @dom.parent()
-
-    ### Cuts longer dimension of tile in half ###
-    orient: ->
-      orientElement(@dom, @wrapper())
 
     ### Wrap the current element in a new tile container ###
     enclose: ->
@@ -108,22 +109,22 @@
       if not container.parent().hasClass(jsTileClass)
         orientElement(container.parent(), container)
 
-    ### Removes this tile and expands the sibling to take the place of it and its parent ###
-    merge: (siblingTile) ->
+    ### Removes the sibling tile and expands this to take the place of it and its parent ###
+    merge: ->
     
-      @wrapper().unwrap()
-      siblingTile.wrapper().remove()
-      @orient()
-
-      siblingTile
+      if @sibling
+        orientElement(@dom, @wrapper())
+        @wrapper().unwrap()
+        @sibling.wrapper().remove()
+        @sibling = null
 
     ### Shrinks, and returns a new Tile filling the newly allocated space ###
     split: (child) ->
 
       @enclose()
 
-      tile = new Tile(child)
-      @orient()
+      tile = new Tile(child, this)
+      orientElement(@dom, @wrapper())
       orientElement(@dom, tile.wrapper())
 
       container = @wrapper().parent()

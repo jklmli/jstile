@@ -3,6 +3,7 @@ mosaic = undefined
 $(document).ready ->
   $('body').append($("<div id='mosaic'/>"))
   mosaic = $('#mosaic').jstile()
+  $('#mosaic').rightClick(add)
   add()
   rescale()
 
@@ -17,13 +18,10 @@ add = ->
   newTile
 
 remove = (tile) ->
-  replacementTile = mosaic.remove(tile)
-  replacementTile.dom.click(->
-    remove(newTile)
-  )
+  mosaic.remove(tile)
   rescale()
 
-  replacementTile
+  tile
 
 rescale = ->
   for image in $('img')
