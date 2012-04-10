@@ -40,13 +40,13 @@
         orientVertically(targetElement)
       else
         orientAutomatically(sourceElement, targetElement)
-     
+
+  # Automatically orients the 'targetElement' based on the size of the 'sourceElement'
   orientAutomatically = (sourceElement, targetElement) ->
     if sourceElement.width() > sourceElement.height()
       orientVertically(targetElement)
     else
       orientHorizontally(targetElement)
-
 
   # HTML classes associated with each level of tile & container
   jsTileClass = 'jstile' # Top-level jstile object
