@@ -14,13 +14,11 @@
     else
       'fill'
 
-  # Orients an element horizontally (using relative sizes)
-  orientHorizontally = (element) ->
+  shrinkVertically = (element) ->
     element.css('width', '100%')
     element.css('height', '50%')
 
-  # Orients an element vertically (using relative sizes)
-  orientVertically = (element) ->
+  shrinkHorizontally = (element) ->
     element.css('width', '50%')
     element.css('height', '100%')
 
@@ -28,25 +26,25 @@
   orientElement = (sourceElement, targetElement, match=true) ->
     if match
       if orientation(sourceElement) is 'portrait'
-        orientVertically(targetElement)
+        shrinkHorizontally(targetElement)
       else if orientation(sourceElement) is 'landscape'
-        orientHorizontally(targetElement)
+        shrinkVertically(targetElement)
       else
-        orientAutomatically(sourceElement, targetElement)
+        shrink(sourceElement, targetElement)
     else
       if orientation(sourceElement) is 'portrait'
-        orientHorizontally(targetElement)
+        shrinkVertically(targetElement)
       else if orientation(sourceElement) is 'landscape'
-        orientVertically(targetElement)
+        shrinkHorizontally(targetElement)
       else
-        orientAutomatically(sourceElement, targetElement)
+        shrink(sourceElement, targetElement)
 
-  # Automatically orients the 'targetElement' based on the size of the 'sourceElement'
-  orientAutomatically = (sourceElement, targetElement) ->
+  # Automatically shrinks the 'targetElement' based on the size of the 'sourceElement'
+  shrink = (sourceElement, targetElement) ->
     if sourceElement.width() > sourceElement.height()
-      orientVertically(targetElement)
+      shrinkHorizontally(targetElement)
     else
-      orientHorizontally(targetElement)
+      shrinkVertically(targetElement)
 
   # HTML classes associated with each level of tile & container
   jsTileClass = 'jstile' # Top-level jstile object
@@ -185,8 +183,8 @@
       # Update the DOM and orient the children DOM elements
       @dom = @wrapper().parent()
       @dom.append(@rightChild.wrapper())
-      orientAutomatically(@dom, @leftChild.wrapper())
-      orientAutomatically(@dom, @rightChild.wrapper())
+      shrink(@dom, @leftChild.wrapper())
+      shrink(@dom, @rightChild.wrapper())
 
       [@leftChild, @rightChild]
 
