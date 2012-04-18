@@ -60,6 +60,11 @@
       @dom.addClass(jsTileClass)
       @leafTiles = []
 
+      if $.fn.droppable?
+        @dom.on('drop', (event, ui) ->
+          @add(ui.draggable)
+        )
+
     ### Returns a new tile split from the oldest tile, break ties left to right, up to down. If no existing tiles, add first ###
     add: (element) ->
 
