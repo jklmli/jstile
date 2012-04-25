@@ -61,6 +61,7 @@
       @leafTiles = []
 
       if $.fn.droppable?
+        @dom.droppable('enable')
         @dom.on('drop', (event, ui) ->
           @add(ui.draggable)
         )
