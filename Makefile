@@ -1,9 +1,14 @@
+SRC = src
+DIST = dist
+
+OUT = jstile
+
 all: build
 
 build:
 	coffee -cb test/init.coffee
-	coffee -cb src/jstile.coffee
+	coffee -j $(DIST)/$(OUT).js -cb $(SRC)/*.coffee
 
 clean:
 	rm -f test/init.js
-	rm -f src/jstile.coffee
+	rm -rf $(DIST)
